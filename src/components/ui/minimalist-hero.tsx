@@ -154,21 +154,23 @@ export const MinimalistHero = ({
             className="absolute z-0 rounded-full bg-yellow-400/90 will-change-[width,height]"
             style={{ width: circleSize, height: circleSize }}
           />
-          <motion.img
-            key={imageSrc}
-            src={imageSrc}
-            alt={imageAlt}
-            className="relative z-10 h-[72%] w-auto max-w-none -translate-y-10 object-contain object-center md:h-[76%] md:-translate-y-12 lg:h-[80%] lg:-translate-y-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            onError={(event) => {
-              const target = event.currentTarget
-              target.onerror = null
-              target.src = 'https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found'
-            }}
-          />
+          <div className="relative z-10 -translate-y-12 md:-translate-y-16 lg:-translate-y-20">
+            <motion.img
+              key={imageSrc}
+              src={imageSrc}
+              alt={imageAlt}
+              className="h-[72%] w-auto max-w-none object-contain object-top md:h-[76%] lg:h-[80%]"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+              onError={(event) => {
+                const target = event.currentTarget
+                target.onerror = null
+                target.src = 'https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found'
+              }}
+            />
+          </div>
         </div>
 
         <motion.div
