@@ -1,0 +1,21 @@
+.circular-text {
+  position: relative;
+  width: clamp(130px, 18vw, 210px);
+  height: clamp(130px, 18vw, 210px);
+  margin: 0 auto;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  -webkit-transform-origin: 50% 50%;
+}
+
+.circular-text span {
+  position: absolute;
+  inset: 0;
+  display: inline-block;
+  font-size: clamp(0.75rem, 1.35vw, 1rem);
+  transition: all 0.5s cubic-bezier(0, 0, 0, 1);
+}
