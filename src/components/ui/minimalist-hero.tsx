@@ -154,7 +154,7 @@ export const MinimalistHero = ({
             className="absolute z-0 rounded-full bg-yellow-400/90 will-change-[width,height]"
             style={{ width: circleSize, height: circleSize }}
           />
-          <div className="relative z-10 -translate-y-12 md:-translate-y-16 lg:-translate-y-20">
+          <div className="relative z-10 -translate-y-24 md:-translate-y-32 lg:-translate-y-40">
             <motion.img
               key={imageSrc}
               src={imageSrc}
