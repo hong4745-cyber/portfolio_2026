@@ -28,7 +28,7 @@
   --secondary-foreground: #171717;
   --destructive: #dc2626;
   --ring: #3b82f6;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #000;
   background: #fff;
   font-synthesis: none;
@@ -47,4 +47,39 @@ body {
 #root {
   width: 100%;
   min-height: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.about-hero { position: relative; height: 250svh; overflow: clip; color: #000; background: #ffd42a; }
+.about-hero__inner { position: sticky; top: 0; display: grid; grid-template-columns: 27% 46% 27%; align-items: center; width: min(82.5vw, 1584px); height: 100svh; margin: 0 auto; overflow: visible; color: #000; }
+.about-hero__intro, .about-hero__journey { position: relative; z-index: 3; }
+.about-hero__eyebrow { margin: 0 0 .55rem; font-size: clamp(.72rem, .83vw, 1rem); font-weight: 400; line-height: 1.2; }
+.about-hero__name { margin: 0; font-size: clamp(2rem, 2.08vw, 2.5rem); font-weight: 700; line-height: 1.05; letter-spacing: .015em; }
+.about-hero__location { margin: .75rem 0 0; font-size: clamp(.8rem, .83vw, 1rem); font-weight: 400; }
+.about-hero__socials { display: flex; gap: 1.4rem; margin-top: 2rem; }
+.about-hero__socials a { display: grid; width: 2.15rem; height: 2.15rem; place-items: center; color: inherit; transition: opacity 180ms ease, transform 180ms ease; }
+.about-hero__socials a:hover { opacity: .65; transform: translateY(-2px); }
+.about-hero__socials svg { width: 100%; height: 100%; stroke-width: 1.8; }
+.about-hero__description { margin: 4.25rem 0 0; font-size: clamp(1.15rem, 1.35vw, 1.625rem); font-weight: 400; line-height: 1.55; letter-spacing: -.02em; white-space: nowrap; }
+.about-hero__portrait { position: relative; align-self: end; height: min(83.5svh, 902px); z-index: 2; }
+.about-hero__circle { position: absolute; top: 3.5%; left: 50%; width: min(37.5vw, 720px); aspect-ratio: 1; border-radius: 50%; background: #000; transform: translateX(-50%); transform-origin: center; will-change: transform; }
+.about-hero__portrait img { position: absolute; bottom: 0; left: 50%; width: min(32.8vw, 630px); max-width: none; transform: translateX(-50%); }
+.about-hero__journey { display: flex; flex-direction: column; justify-self: start; margin: 0 0 0 -.4em; font-size: clamp(6rem, 8.25vw, 9.9rem); font-weight: 800; line-height: 1.03; letter-spacing: -.055em; }
+.about-hero__inverted { position: absolute; inset: 0; z-index: 4; display: grid; grid-template-columns: 27% 46% 27%; align-items: center; color: #fff; pointer-events: none; will-change: clip-path; }
+
+@media (max-width: 900px) {
+  .about-hero__inner { grid-template-columns: 1fr; width: 100%; height: 100svh; padding: 2rem 1.5rem 0; }
+  .about-hero__inverted { grid-template-columns: 1fr; }
+  .about-hero__intro { align-self: start; }
+  .about-hero__description { margin-top: 2rem; font-size: 1rem; }
+  .about-hero__portrait { position: absolute; right: 0; bottom: 0; left: 0; height: 63svh; }
+  .about-hero__circle { top: 8%; width: min(88vw, 560px); }
+  .about-hero__portrait img { width: min(75vw, 470px); }
+  .about-hero__journey { position: absolute; right: 1rem; bottom: 2rem; z-index: 3; margin: 0; font-size: clamp(4.6rem, 23vw, 7rem); text-align: right; }
 }

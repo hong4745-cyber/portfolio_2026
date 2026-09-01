@@ -92,13 +92,13 @@ function Styles() {
   return (
     <style>{`
       .icsa-wrap *, .icsa-wrap *::before, .icsa-wrap *::after {
-        box-sizing: border-box; margin: 0; padding: 0;
+        box-sizing: border-box;
       }
       .icsa-wrap {
         width: 100%; height: 100svh;
         overflow-y: auto; overflow-x: clip;
         overscroll-behavior: contain;
-        font-family: Inter, sans-serif;
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background: #fff;
       }
       .icsa-track { height: 300vh; position: relative; }

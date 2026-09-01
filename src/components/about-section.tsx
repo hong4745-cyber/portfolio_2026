@@ -1,55 +1,90 @@
-import { AtSign, Camera, Mail } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Camera, Mail } from 'lucide-react'
+import { FaGithub } from 'react-icons/fa'
 import { useEffect, useRef, useState } from 'react'
 import personImage from '@/assets/back_2-kcRSgiVN.png'
 
 const socials = [
-  { label: 'Email', href: 'mailto:', icon: Mail },
-  { label: 'GitHub', href: '#', icon: AtSign },
+  { label: '이메일', href: 'mailto:', icon: Mail },
+  { label: 'GitHub', href: '#', icon: FaGithub },
   { label: 'Instagram', href: '#', icon: Camera },
 ]
 
-const clamp = (value: number) => Math.min(1, Math.max(0, value))
+function Intro({ duplicate = false }: { duplicate?: boolean }) {
+  return (
+    <div className="about-hero__intro">
+      <p className="about-hero__eyebrow">DESIGN · UI/UX · FRONTEND</p>
+      <h2 id={duplicate ? undefined : 'about-name'} className="about-hero__name">BAEK JIEUN</h2>
+      <p className="about-hero__location">Daejeon, Korea</p>
+      <div className="about-hero__socials">
+        {socials.map(({ label, href, icon: Icon }) => (
+          <a key={label} href={href} aria-label={duplicate ? undefined : label} tabIndex={duplicate ? -1 : undefined}>
+            <Icon aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+      <p className="about-hero__description">Visual design에서 출발해 UI/UX와<br />프론트엔드로 작업 영역을 넓혀가고<br />있습니다.</p>
+    </div>
+  )
+}
+
+function Journey() {
+  return <h1 className="about-hero__journey" aria-label="Journey"><span>JOUR</span><span>NEY</span></h1>
+}
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState(0)
+  const [viewportWidth, setViewportWidth] = useState(1920)
 
   useEffect(() => {
     const section = sectionRef.current
-    const root = section?.closest<HTMLDivElement>('.icsa-wrap')
-    if (!section || !root) return
+    const scrollRoot = section?.closest<HTMLDivElement>('.icsa-wrap')
+    if (!section || !scrollRoot) return
+
+    let frame = 0
     const update = () => {
-      const rect = section.getBoundingClientRect()
-      const rootRect = root.getBoundingClientRect()
-      setProgress(clamp((rootRect.height - rect.top) / (rootRect.height + rect.height)))
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const sectionRect = section.getBoundingClientRect()
+        const rootRect = scrollRoot.getBoundingClientRect()
+        const distance = Math.max(1, sectionRect.height - rootRect.height)
+        setProgress(Math.min(1, Math.max(0, (rootRect.top - sectionRect.top) / distance)))
+        setViewportWidth(scrollRoot.clientWidth)
+      })
     }
+
     update()
-    root.addEventListener('scroll', update, { passive: true })
-    return () => root.removeEventListener('scroll', update)
+    scrollRoot.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      cancelAnimationFrame(frame)
+      scrollRoot.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
   }, [])
 
-  const textColor = `rgb(${Math.round(255 - progress * 255)}, ${Math.round(255 - progress * 255)}, ${Math.round(255 - progress * 255)})`
+  const scale = 1 + progress * 4
+  const maskRadius = Math.min(viewportWidth * 0.1875, 360) * scale
 
   return (
-    <section ref={sectionRef} id="about" aria-label="About" className="relative min-h-[100svh] overflow-hidden bg-black text-white">
-      <div className="mx-auto grid min-h-[100svh] w-full max-w-[1600px] grid-cols-1 items-center px-8 py-16 md:grid-cols-[1fr_1.4fr_1fr] md:px-14 lg:px-20">
-        <motion.div style={{ color: textColor }} className="relative z-30 self-center md:justify-self-start">
-          <p className="mb-2 text-xs tracking-[0.18em]">DESIGN · UI/UX · FRONTEND</p>
-          <h2 className="text-4xl font-semibold tracking-[0.06em] md:text-5xl">BAEK JIEUN</h2>
-          <p className="mt-2 text-base">Daejeon, Korea</p>
-          <div className="mt-8 flex items-center gap-5">
-            {socials.map(({ label, href, icon: Icon }) => <a key={label} href={href} aria-label={label} className="transition-opacity hover:opacity-60"><Icon className="h-8 w-8 stroke-[1.8]" /></a>)}
-          </div>
-          <p className="mt-16 max-w-[24rem] text-xl leading-[1.65] md:text-2xl">Visual design에서 출발해 UI/UX와<br className="hidden md:block" /> 프론트엔드로 작업 영역을 넓혀가고<br className="hidden md:block" /> 있습니다.</p>
-        </motion.div>
-
-        <div className="relative flex h-[58vh] min-h-[390px] items-end justify-center md:h-[78vh]">
-          <motion.div style={{ width: `clamp(320px, ${38 + progress * 72}vw, 1200px)`, height: `clamp(320px, ${38 + progress * 72}vw, 1200px)` }} className="absolute bottom-0 left-1/2 z-10 -translate-x-1/2 rounded-full bg-[#F9D02A]" />
-          <img src={personImage} alt="Baek Jieun portrait" className="relative z-20 h-[108%] w-auto max-w-none object-contain object-bottom" />
+    <section ref={sectionRef} id="about" aria-labelledby="about-name" className="about-hero">
+      <div className="about-hero__inner">
+        <Intro />
+        <div className="about-hero__portrait" aria-hidden="true">
+          <div className="about-hero__circle" style={{ transform: `translateX(-50%) scale(${scale})` }} />
+          <img src={personImage} alt="" />
         </div>
+        <Journey />
 
-        <motion.h1 style={{ color: textColor }} className="relative z-30 text-[clamp(4.5rem,10vw,10rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] md:justify-self-start">JOUR<br />NEY</motion.h1>
+        <div
+          className="about-hero__inverted"
+          aria-hidden="true"
+          style={{ clipPath: `circle(${maskRadius}px at 50% 50%)` }}
+        >
+          <Intro duplicate />
+          <div />
+          <Journey />
+        </div>
       </div>
     </section>
   )

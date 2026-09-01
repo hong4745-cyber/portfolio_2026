@@ -68,7 +68,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       sections,
       className,
       style,
-      fontFamily = 'Inter, system-ui, sans-serif',
+      fontFamily = 'Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       header,
       footer,
       showProgress = true,
