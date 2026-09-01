@@ -145,7 +145,7 @@ export const MinimalistHero = ({
           </a>
         </motion.div>
 
-        <div className="relative order-1 flex min-h-80 items-center justify-center overflow-hidden md:order-2 md:h-full">
+        <div className="relative order-1 flex min-h-80 items-center justify-center overflow-visible md:order-2 md:h-full">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -158,7 +158,7 @@ export const MinimalistHero = ({
             key={imageSrc}
             src={imageSrc}
             alt={imageAlt}
-            className="relative z-10 h-[125%] w-auto max-w-none -translate-y-8 object-contain object-top md:h-[135%] md:-translate-y-10 lg:h-[145%]"
+            className="relative z-10 h-[90%] w-auto max-w-none object-contain object-center md:h-[95%] lg:h-full"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
