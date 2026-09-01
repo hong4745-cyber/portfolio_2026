@@ -21,7 +21,7 @@ export default function AboutSection() {
         </motion.div>
         <div className="relative flex h-[52vh] min-h-[360px] items-end justify-center md:h-[74vh]">
           <motion.div initial={{ scale: 0.86, opacity: 1 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.9 }} className="absolute bottom-0 left-1/2 aspect-square w-[min(78vw,620px)] -translate-x-1/2 rounded-full bg-[#ffd21c]" />
-          <motion.img src={personImage} alt="Baek Jieun portrait" initial={{ opacity: 1, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.15 }} className="relative z-10 h-[108%] w-auto max-w-none object-contain object-bottom" />
+          <motion.img src={personImage} alt="Baek Jieun portrait" initial={{ opacity: 1, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.15 }} className="relative z-10 h-[95%] w-auto max-w-none object-contain object-bottom" />
         </div>
         <motion.h1 initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="z-10 text-[clamp(4.5rem,10vw,10rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] md:justify-self-start">JOUR<br />NEY</motion.h1>
       </div>
