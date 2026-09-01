@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -51,13 +51,49 @@ export const MinimalistHero = ({
   locationText,
   className,
 }: MinimalistHeroProps) => {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [circleSize, setCircleSize] = useState(280)
+
+  useEffect(() => {
+    const track = trackRef.current
+    const scrollRoot = track?.closest<HTMLDivElement>('.icsa-wrap')
+    if (!track || !scrollRoot) return
+
+    let frame = 0
+    const updateCircle = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const rootRect = scrollRoot.getBoundingClientRect()
+        const trackRect = track.getBoundingClientRect()
+        const distance = Math.max(1, trackRect.height - rootRect.height)
+        const progress = Math.min(1, Math.max(0, (rootRect.top - trackRect.top) / distance))
+        const eased = progress < 0.5
+          ? 4 * progress ** 3
+          : 1 - (-2 * progress + 2) ** 3 / 2
+        const startSize = window.innerWidth < 768 ? 280 : 400
+        const coverSize = Math.max(rootRect.width, rootRect.height) * 1.65
+        setCircleSize(coverSize - eased * (coverSize - startSize))
+      })
+    }
+
+    updateCircle()
+    scrollRoot.addEventListener('scroll', updateCircle, { passive: true })
+    window.addEventListener('resize', updateCircle)
+    return () => {
+      cancelAnimationFrame(frame)
+      scrollRoot.removeEventListener('scroll', updateCircle)
+      window.removeEventListener('resize', updateCircle)
+    }
+  }, [])
+
   return (
-    <div
-      className={cn(
-        'relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-background p-8 font-sans md:h-screen md:p-12',
-        className,
-      )}
-    >
+    <div ref={trackRef} className="relative h-[300svh] w-full bg-background">
+      <div
+        className={cn(
+          'sticky top-0 flex h-[100svh] w-full flex-col items-center justify-between overflow-hidden bg-background p-8 font-sans md:p-12',
+          className,
+        )}
+      >
       <header className="z-30 flex w-full max-w-7xl items-center justify-between">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -109,18 +145,20 @@ export const MinimalistHero = ({
           </a>
         </motion.div>
 
-        <div className="relative order-1 flex min-h-80 items-center justify-center md:order-2 md:h-full">
+        <div className="relative order-1 flex min-h-80 items-center justify-center overflow-hidden md:order-2 md:h-full">
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="absolute z-0 h-[280px] w-[280px] rounded-full bg-yellow-400/90 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
+            className="absolute z-0 rounded-full bg-yellow-400/90 will-change-[width,height]"
+            style={{ width: circleSize, height: circleSize }}
           />
           <motion.img
+            key={imageSrc}
             src={imageSrc}
             alt={imageAlt}
-            className="relative z-10 h-auto w-48 scale-125 object-cover md:w-64 md:scale-150 lg:w-72"
+            className="relative z-10 h-[125%] w-auto max-w-none -translate-y-8 object-contain object-top md:h-[135%] md:-translate-y-10 lg:h-[145%]"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -170,6 +208,7 @@ export const MinimalistHero = ({
           {locationText}
         </motion.div>
       </footer>
+      </div>
     </div>
   )
 }
