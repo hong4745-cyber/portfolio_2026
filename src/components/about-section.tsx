@@ -1,6 +1,6 @@
 import { BriefcaseBusiness, Camera, Globe2, MessageCircle } from 'lucide-react'
 import { MinimalistHero } from '@/components/ui/minimalist-hero'
-import personImage from '@/assets/about-replacement.png'
+import personImage from '@/assets/person-transparent.png'
 
 const navLinks = [
   { label: 'HOME', href: '#' },
