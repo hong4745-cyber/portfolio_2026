@@ -1,11 +1,11 @@
-import { Github, Instagram, Mail } from 'lucide-react'
+import { AtSign, Camera, Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
 import personImage from '@/assets/person-transparent.png'
 
 const socials = [
   { label: 'Email', href: 'mailto:', icon: Mail },
-  { label: 'GitHub', href: '#', icon: Github },
-  { label: 'Instagram', href: '#', icon: Instagram },
+  { label: 'GitHub', href: '#', icon: AtSign },
+  { label: 'Instagram', href: '#', icon: Camera },
 ]
 
 export default function AboutSection() {
