@@ -1,6 +1,6 @@
 import { AtSign, Camera, Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
-import personImage from '@/assets/person-transparent.png'
+import personImage from '@/assets/back_2-kcRSgiVN.png'
 
 const socials = [
   { label: 'Email', href: 'mailto:', icon: Mail },
