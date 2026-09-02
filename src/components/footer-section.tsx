@@ -8,7 +8,6 @@ const sections = [
       { name: 'Branding', href: '#skills' },
       { name: 'Editorial Design', href: '#skills' },
       { name: 'UI / UX', href: '#skills' },
-      { name: 'Content Design', href: '#skills' },
     ],
   },
   {

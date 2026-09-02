@@ -1,5 +1,5 @@
 import CurvedLoop from '@/components/ui/CurvedLoop'
-import DepthCarousel from '@/components/ui/DepthCarousel'
+import { CardsParallax, type iCardItem } from '@/components/ui/scroll-cards'
 
 const projects = [
   { title: 'Nebula', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=85' },
@@ -11,13 +11,23 @@ const projects = [
   { title: 'Signal', image: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=600&q=85' },
 ]
 
+const scrollCardItems: iCardItem[] = projects.map(({ title, image }) => ({
+  title,
+  description: 'Selected project',
+  tag: 'portfolio',
+  src: image,
+  link: '#',
+  color: '#ffffff',
+  textColor: '#ffffff',
+}))
+
 export default function WorkSection() {
   return (
-    <section id="work" className="w-full overflow-hidden bg-white text-black" aria-labelledby="work-heading">
+    <section id="work" className="w-full bg-white text-black" aria-labelledby="work-heading">
       <h2 id="work-heading" className="sr-only">Work</h2>
-      <CurvedLoop marqueeText="PORTFOLIO ✦ WORK ✦ " speed={1.5} curveAmount={180} direction="left" interactive />
-      <div className="relative h-[500px] w-full md:h-[600px]">
-        <DepthCarousel items={projects.map(({ image, title }) => ({ image, alt: title }))} depth={220} spread={90} tilt={22} tiltDirection="right" perspective={1400} visibleCards={4} falloff={0.2} blur={6} loop={false} />
+      <CurvedLoop marqueeText="PORTFOLIO ✦ WORK ✦ " speed={0.9} curveAmount={180} direction="left" interactive />
+      <div className="relative w-full">
+        <CardsParallax items={scrollCardItems} />
       </div>
     </section>
   )

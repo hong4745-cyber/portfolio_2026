@@ -35,6 +35,7 @@ export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(1920)
+  const [viewportHeight, setViewportHeight] = useState(1080)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -50,6 +51,7 @@ export default function AboutSection() {
         const distance = Math.max(1, sectionRect.height - rootRect.height)
         setProgress(Math.min(1, Math.max(0, (rootRect.top - sectionRect.top) / distance)))
         setViewportWidth(scrollRoot.clientWidth)
+        setViewportHeight(scrollRoot.clientHeight)
       })
     }
 
@@ -63,8 +65,11 @@ export default function AboutSection() {
     }
   }, [])
 
-  const scale = 1 + progress * 4
-  const maskRadius = Math.min(viewportWidth * 0.1875, 360) * scale
+  const circleRadius = Math.min(viewportWidth * 0.1875, 360)
+  const coverRadius = Math.hypot(viewportWidth, viewportHeight) / 2
+  const coverScale = coverRadius / circleRadius + 0.08
+  const scale = coverScale - progress * (coverScale - 1)
+  const maskRadius = circleRadius * scale
 
   return (
     <section ref={sectionRef} id="about" aria-labelledby="about-name" className="about-hero">

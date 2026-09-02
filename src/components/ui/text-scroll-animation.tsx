@@ -1,8 +1,10 @@
 "use client"
 
 import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion"
-import { useEffect, useRef, type RefObject } from "react"
+import { useEffect, useRef, type CSSProperties, type RefObject } from "react"
 import { cn } from "@/lib/utils"
+import claudeCodeLogo from "@/assets/claude-code-white-icon.svg"
+import codexLogo from "@/assets/Codex Logo - Black - 128x128 - zonalogo.com.png"
 
 type CharacterProps = {
   char: string
@@ -14,13 +16,15 @@ type CharacterProps = {
 const CharacterV1 = ({ char, index, centerIndex, scrollYProgress }: CharacterProps) => {
   const isSpace = char === " "
   const distanceFromCenter = index - centerIndex
-  const x = useTransform(scrollYProgress, [0, 0.5], [distanceFromCenter * 50, 0])
-  const rotateX = useTransform(scrollYProgress, [0, 0.5], [distanceFromCenter * 50, 0])
+  const x = useTransform(scrollYProgress, [0.08, 0.72], [distanceFromCenter * 50, 0])
+  const y = useTransform(scrollYProgress, [0.08, 0.72], [Math.abs(distanceFromCenter) * 8 + 30, 0])
+  const rotateX = useTransform(scrollYProgress, [0.08, 0.72], [distanceFromCenter * 50, 0])
+  const opacity = useTransform(scrollYProgress, [0.08, 0.32], [0, 1])
 
   return (
     <motion.span
       className={cn("inline-block text-orange-500", isSpace && "w-4")}
-      style={{ x, rotateX }}
+      style={{ x, y, rotateX, opacity }}
     >
       {char}
     </motion.span>
@@ -93,33 +97,55 @@ function useContainerScrollProgress(targetRef: RefObject<HTMLDivElement | null>)
   return progress
 }
 
-const designIcons = [
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/adobephotoshop.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/adobeillustrator.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/adobeindesign.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/figma.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/adobeaftereffects.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/adobepremierepro.svg",
-]
+const skillGroups = [
+  {
+    title: "Frontend",
+    skills: [
+      ["HTML5", "웹 퍼블리싱 및 시맨틱 마크업"], ["CSS3", "반응형 레이아웃 및 커스텀 애니메이션"],
+      ["JavaScript", "DOM 제어, 인터랙션 구현 및 API 연동"], ["React", "SPA 기반 컴포넌트 설계 및 개발"],
+      ["TypeScript", "컴포넌트 타입 정의 및 안정적인 코드 작성"],
+      ["Framer Motion", "React 컴포넌트 애니메이션 및 상태 전환"], ["Firebase", "Authentication 및 Cloud Firestore 데이터 관리"],
+      ["Naver Maps API", "지도 및 위치 기반 콘텐츠 구현"], ["GitHub", "소스 코드 버전 관리"], ["Vercel", "프론트엔드 배포 및 호스팅"],
+    ],
+  },
+  {
+    title: "Design Tools",
+    skills: [
+      ["Figma", "UI 기획, 와이어프레임 및 프로토타입 제작"], ["Adobe Photoshop", "이미지 보정·합성 및 포스터·브로슈어 제작"],
+      ["Adobe Illustrator", "벡터 그래픽 및 홍보물 디자인"], ["Adobe InDesign", "브로슈어·리플렛·포스터·도록 편집 디자인"],
+      ["Canva", "소셜 콘텐츠, 발표 자료 및 간단한 그래픽 제작"],
+    ],
+  },
+  {
+    title: "AI Tools",
+    skills: [
+      ["ChatGPT", "코드 작성 보조 및 콘텐츠 기획"], ["GPT Codex", "코드 생성, 수정 및 개발 보조"],
+      ["Claude", "AI 페어 프로그래밍 및 설계 검토"], ["Claude Code", "포트폴리오 개발 및 코드 개선"],
+      ["Gemini", "AI 이미지 생성 및 광고 콘텐츠 기획"],
+    ],
+  },
+] as const
 
-const webAiIcons = [
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/html5.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/css3.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/javascript.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/react.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/openai.svg",
-  "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/github.svg",
-]
+const skillLogoSlugs: Record<string, string> = {
+  HTML5: "html5", CSS3: "css3", JavaScript: "javascript", React: "react", TypeScript: "typescript",
+  "Framer Motion": "framer", Firebase: "firebase", "Naver Maps API": "naver",
+  GitHub: "github", Vercel: "vercel", Figma: "figma", "Adobe Photoshop": "adobephotoshop",
+  "Adobe Illustrator": "adobeillustrator", "Adobe InDesign": "adobeindesign", Canva: "canva",
+  ChatGPT: "openai", "GPT Codex": "openai", Claude: "claude", "Claude Code": "claude",
+  Gemini: "googlegemini", "Three.js": "threedotjs", "React Three Fiber": "react",
+  OGL: "webgl", Lenis: "lenis", Vite: "vite", Iconify: "iconify", "Lucide React": "lucide",
+}
 
-const skillLabels = ["Branding", "Editorial", "UI/UX", "AI", "Content", "Marketing"]
+const skillLogoUrl = (name: string) => {
+  if (name === "Claude Code") return claudeCodeLogo
+  if (name === "GPT Codex") return codexLogo
+  return `https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/${skillLogoSlugs[name] ?? "code"}.svg`
+}
+const skillAbbreviation = (name: string) => name.split(/\s+/).map((part) => part[0]).join("").slice(0, 3).toUpperCase()
 
 const Skiper31 = () => {
   const targetRef = useRef<HTMLDivElement>(null)
-  const targetRef2 = useRef<HTMLDivElement>(null)
-  const targetRef3 = useRef<HTMLDivElement>(null)
   const scrollYProgress = useContainerScrollProgress(targetRef)
-  const scrollYProgress2 = useContainerScrollProgress(targetRef2)
-  const scrollYProgress3 = useContainerScrollProgress(targetRef3)
 
   const text = "creative skills"
   const characters = text.split("")
@@ -127,13 +153,7 @@ const Skiper31 = () => {
 
   return (
     <main id="skills" className="relative w-full bg-white" aria-labelledby="skills-heading">
-      <div className="absolute left-1/2 top-20 z-10 grid -translate-x-1/2 justify-items-center gap-6 text-center text-black">
-        <span className="relative max-w-[14ch] text-xs uppercase leading-tight opacity-50 after:absolute after:left-1/2 after:top-full after:h-16 after:w-px after:bg-gradient-to-b after:from-[#f5f4f3] after:to-black after:content-['']">
-          Scroll to explore skills
-        </span>
-      </div>
-
-      <div ref={targetRef} className="relative flex h-[190vh] items-center justify-center overflow-hidden bg-[#f5f4f3] p-[2vw]">
+      <div ref={targetRef} className="relative flex h-[120vh] items-center justify-center overflow-hidden bg-[#fff] p-[2vw]">
         <h2 id="skills-heading" className="w-full max-w-5xl text-center text-5xl font-bold uppercase tracking-tighter text-black md:text-7xl lg:text-8xl" style={{ perspective: "500px" }}>
           {characters.map((char, index) => (
             <CharacterV1 key={`${char}-${index}`} char={char} index={index} centerIndex={centerIndex} scrollYProgress={scrollYProgress} />
@@ -141,45 +161,50 @@ const Skiper31 = () => {
         </h2>
       </div>
 
-      <SkillIconPanel refValue={targetRef2} progress={scrollYProgress2} icons={designIcons} label="Design tools" variant="rise" />
-      <SkillIconPanel refValue={targetRef3} progress={scrollYProgress3} icons={webAiIcons} label="Web & AI tools" variant="rotate" />
-
-      <div className="relative -mt-[90vh] flex min-h-[110vh] items-center justify-center bg-[#f5f4f3] px-6 pb-28 pt-40">
-        <div className="flex max-w-4xl flex-wrap justify-center gap-3">
-          {skillLabels.map((skill) => (
-            <span key={skill} className="rounded-full border border-black/15 bg-white px-5 py-3 text-sm font-semibold uppercase tracking-wider text-black shadow-sm md:text-base">
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+      {skillGroups.map((group, groupIndex) => <SkillGroupPanel key={group.title} group={group} index={groupIndex} />)}
     </main>
   )
 }
 
-function SkillIconPanel({ refValue, progress, icons, label, variant }: {
-  refValue: RefObject<HTMLDivElement | null>
-  progress: MotionValue<number>
-  icons: string[]
-  label: string
-  variant: "rise" | "rotate"
-}) {
-  const centerIndex = Math.floor(icons.length / 2)
+function SkillGroupPanel({ group, index }: { group: (typeof skillGroups)[number]; index: number }) {
+  const marqueeSkills = [...group.skills, ...group.skills]
   return (
-    <div ref={refValue} className="relative -mt-[90vh] flex h-[190vh] flex-col items-center justify-center gap-10 overflow-hidden bg-[#f5f4f3] p-[2vw]">
-      <p className="flex items-center justify-center gap-3 text-center text-xl font-medium tracking-tight text-black md:text-2xl">
+    <section className="relative flex min-h-[70vh] flex-col items-center justify-center gap-14 overflow-hidden bg-white py-24">
+      <motion.h3
+        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }}
+        transition={{ duration: .6, delay: index * .03 }}
+        className="flex items-center justify-center gap-3 text-center text-2xl font-medium tracking-tight text-black md:text-4xl"
+      >
         <Bracket className="h-10 text-black md:h-12" />
-        <span>{label}</span>
+        <span>{group.title}</span>
         <Bracket className="h-10 scale-x-[-1] text-black md:h-12" />
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8" style={{ perspective: "500px" }}>
-        {icons.map((icon, index) => variant === "rise" ? (
-          <CharacterV2 key={icon} char={icon} index={index} centerIndex={centerIndex} scrollYProgress={progress} />
-        ) : (
-          <CharacterV3 key={icon} char={icon} index={index} centerIndex={centerIndex} scrollYProgress={progress} />
-        ))}
+      </motion.h3>
+      <div className="skills-marquee w-full" style={{ '--marquee-duration': `${Math.max(24, group.skills.length * 4)}s` } as CSSProperties}>
+        <div className={`skills-marquee__track ${index % 2 === 1 ? 'skills-marquee__track--reverse' : ''}`}>
+          {marqueeSkills.map(([name, description], skillIndex) => (
+            <button
+              type="button"
+              key={`${name}-${skillIndex}`}
+              className="skills-marquee__item"
+              aria-label={`${name}: ${description}`}
+              title={`${name} — ${description}`}
+            >
+              <span className="skills-marquee__fallback" aria-hidden="true">{skillAbbreviation(name)}</span>
+              <img
+                src={skillLogoUrl(name)}
+                alt=""
+                loading="lazy"
+                onError={(event) => { event.currentTarget.style.display = 'none' }}
+              />
+              <span className="skills-marquee__tooltip" aria-hidden="true">
+                <strong>{name}</strong>
+                <small>{description}</small>
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

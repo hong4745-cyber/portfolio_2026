@@ -22,7 +22,7 @@ interface TimelineProps {
   data: TimelineEntry[]
   eyebrow?: string
   heading?: string
-  description?: string
+  description?: ReactNode
 }
 
 export const Timeline = ({
@@ -89,20 +89,14 @@ export const Timeline = ({
 
   return (
     <section
-      className="w-full bg-white font-sans md:px-10"
+      className="w-full bg-white pt-[60px] font-sans md:px-10"
       ref={setContainer}
-      aria-labelledby="timeline-heading"
+      aria-label={heading}
     >
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 lg:px-10 lg:py-28">
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-purple-600">
+      <div className="mx-auto max-w-7xl p-[30px]">
+        <p className="mb-4 text-[24px] font-semibold uppercase tracking-[0.2em] text-[#000]">
           {eyebrow}
         </p>
-        <h2
-          id="timeline-heading"
-          className="mb-5 max-w-4xl text-3xl font-bold tracking-tight text-black md:text-5xl"
-        >
-          {heading}
-        </h2>
         <p className="max-w-lg text-sm leading-7 text-neutral-600 md:text-base">
           {description}
         </p>
@@ -112,23 +106,29 @@ export const Timeline = ({
         {data.map((item, index) => (
           <article
             key={`${item.title}-${index}`}
-            className="flex justify-start gap-4 pt-16 md:gap-10 md:pt-36"
+            className="flex justify-start gap-4 pt-[50px] md:gap-10"
           >
-            <div className="sticky top-32 z-40 flex max-w-xs self-start md:w-full md:max-w-sm md:flex-row md:items-center">
-              <div className="absolute left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white md:left-3">
-                <div className="h-4 w-4 rounded-full border border-neutral-300 bg-neutral-200" />
+            <div className="sticky top-32 z-40 flex max-w-xs translate-y-[60px] self-start md:w-full md:max-w-sm md:flex-row md:items-center">
+              <div className={`absolute left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white md:left-3 ${index === 1 ? 'translate-y-[20px]' : ''}`}>
+                <div className="h-4 w-4 rounded-full border border-black bg-black" />
               </div>
-              <h3 className="hidden pl-20 text-xl font-bold text-neutral-500 md:block md:text-4xl lg:text-5xl">
+              <h3 className={`hidden pl-20 text-[16px] font-medium text-black md:block md:text-[22px] lg:text-[26px] ${index === 1 ? 'mt-[37px]' : ''}`}>
                 {item.title}
               </h3>
             </div>
 
-            <div className="relative w-full pl-16 pr-4 md:pl-4">
-              <h3 className="mb-4 block text-left text-2xl font-bold text-neutral-500 md:hidden">
+            <motion.div
+              className={`relative w-full pl-16 pr-4 pt-[50px] md:pl-4 ${index === 0 ? '-mt-[32px]' : index === 1 ? 'mt-[10px]' : ''}`}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <h3 className="mb-4 block text-left text-[18px] font-medium text-black md:hidden">
                 {item.title}
               </h3>
               {item.content}
-            </div>
+            </motion.div>
           </article>
         ))}
 
@@ -139,9 +139,10 @@ export const Timeline = ({
         >
           <motion.div
             style={{ height: heightTransform, opacity: opacityTransform }}
-            className="absolute inset-x-0 top-0 w-[2px] rounded-full bg-gradient-to-t from-purple-500 from-[0%] via-blue-500 via-[10%] to-transparent"
+            className="absolute inset-x-0 top-0 w-[2px] rounded-full bg-gradient-to-t from-neutral-400 from-[0%] via-neutral-300 via-[10%] to-transparent"
           />
         </div>
+
       </div>
     </section>
   )

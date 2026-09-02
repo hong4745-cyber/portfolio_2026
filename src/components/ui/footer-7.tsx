@@ -85,7 +85,7 @@ export const Footer7 = ({
   }
 
   return (
-    <footer className="h-[300px] overflow-y-auto bg-black px-6 py-8 text-white md:px-10">
+    <footer className="h-[300px] overflow-y-auto bg-black p-[50px] text-white">
       <div className="container mx-auto flex h-full max-w-7xl flex-col justify-between">
         <div className="flex w-full flex-col justify-between gap-8 lg:flex-row lg:items-start lg:text-left">
           <div className="flex w-full flex-col justify-between gap-4 lg:items-start">
@@ -119,10 +119,12 @@ export const Footer7 = ({
                 <h3 className="mb-4 font-bold">{section.title}</h3>
                 <ul className="space-y-2 text-sm text-white/60">
                   {section.links.map((link) => (
-                    <li key={`${section.title}-${link.name}`} className="font-medium transition-colors hover:text-white">
-                      <a href={link.href} onClick={(event) => preventPlaceholderJump(event, link.href)}>
-                        {link.name}
-                      </a>
+                    <li key={`${section.title}-${link.name}`} className={`font-medium ${section.title === 'Expertise' || section.title === 'Built With' ? '!text-white/60 transition-none' : 'transition-colors hover:text-white'}`}>
+                      {section.title === 'Expertise' || section.title === 'Built With' ? (
+                        <span>{link.name}</span>
+                      ) : (
+                        <a href={link.href} onClick={(event) => preventPlaceholderJump(event, link.href)}>{link.name}</a>
+                      )}
                     </li>
                   ))}
                 </ul>

@@ -10,6 +10,10 @@ interface ResumeCardProps {
   location: string
   children?: ReactNode
   accent: 'purple' | 'blue' | 'emerald'
+  topLine?: boolean
+  bottomLine?: boolean
+  paddingTop?: number
+  paddingBottom?: number
 }
 
 const accentClasses = {
@@ -18,20 +22,33 @@ const accentClasses = {
   emerald: 'text-emerald-600 bg-emerald-50',
 }
 
-function ResumeCard({ icon: Icon, category, title, period, location, children, accent }: ResumeCardProps) {
+function ResumeCard({
+  icon: Icon,
+  category,
+  title,
+  period,
+  location,
+  children,
+  accent,
+  topLine = true,
+  bottomLine = false,
+  paddingTop = 32,
+  paddingBottom = 32,
+}: ResumeCardProps) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6 shadow-[0_12px_40px_rgba(0,0,0,0.05)] md:p-8">
-      <div className={`mb-5 inline-flex items-center gap-3 rounded-full px-3 py-2 ${accentClasses[accent]}`}>
-        <Icon className="h-5 w-5" aria-hidden="true" />
-        <span className="text-xs font-semibold uppercase tracking-[0.16em]">{category}</span>
-      </div>
-      <h4 className="text-xl font-bold text-neutral-900 md:text-2xl">{title}</h4>
-      <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-neutral-500">
-        <span>{period}</span>
-        <span className="inline-flex items-center gap-1.5">
-          <MapPin className="h-4 w-4" aria-hidden="true" />
-          {location}
-        </span>
+    <div
+      className={`mb-0 border-neutral-200 px-6 md:px-8 ${topLine ? 'border-t' : ''} ${bottomLine ? 'border-b' : ''}`}
+      style={{ paddingTop: `${paddingTop}px`, paddingBottom: `${paddingBottom}px` }}
+    >
+      <div className="flex items-center gap-5 overflow-x-auto whitespace-nowrap">
+        <h4 className="text-xl font-bold text-neutral-900 md:text-2xl">{title}</h4>
+        <div className="flex min-w-0 flex-1 items-center gap-5 text-sm font-medium text-neutral-500">
+          <span>{period}</span>
+          <span className="ml-auto inline-flex items-center gap-1.5">
+            <MapPin className="h-4 w-4" aria-hidden="true" />
+            {location}
+          </span>
+        </div>
       </div>
       {children}
     </div>
@@ -39,7 +56,7 @@ function ResumeCard({ icon: Icon, category, title, period, location, children, a
 }
 
 const listClassName = 'mt-6 list-disc space-y-2.5 pl-5 text-sm leading-7 text-neutral-700 marker:text-neutral-400 md:text-base'
-const groupClassName = 'space-y-6'
+const groupClassName = 'flex flex-col gap-0'
 
 export default function EducationCareerSection() {
   const data = [
@@ -48,7 +65,7 @@ export default function EducationCareerSection() {
       content: (
         <div className={groupClassName}>
           <ResumeCard icon={GraduationCap} category="Education" title="청양여자정보고등학교" period="1999.03 — 2001.02" location="청양" accent="purple" />
-          <ResumeCard icon={GraduationCap} category="Education" title="우송정보대학 비주얼패키지디자인과" period="2013.03 — 2015.02" location="대전" accent="purple" />
+          <ResumeCard icon={GraduationCap} category="Education" title="우송정보대학 비주얼패키지디자인과" period="2013.03 — 2015.02" location="대전" accent="purple" bottomLine />
         </div>
       ),
     },
@@ -79,7 +96,7 @@ export default function EducationCareerSection() {
               <li>다양한 편집디자인 실무 및 디자인 수정, 운영 업무 수행</li>
             </ul>
           </ResumeCard>
-          <ResumeCard icon={BriefcaseBusiness} category="Career" title="우송정보대학" period="2015.03 — 2016.03" location="대전" accent="blue">
+          <ResumeCard icon={BriefcaseBusiness} category="Career" title="우송정보대학" period="2015.03 — 2016.03" location="대전" accent="blue" bottomLine>
             <ul className={listClassName}>
               <li>학과 행정 및 행사 운영 지원</li>
               <li>학과 행정업무 및 조교 업무 수행</li>
@@ -146,7 +163,7 @@ export default function EducationCareerSection() {
       data={data}
       eyebrow="Resume"
       heading="Education / Career / Training"
-      description="디자인을 공부하고 실무 경험을 쌓아 온 과정과 새로운 기술을 익혀 가는 여정입니다."
+      description={<>디자인을 공부하고 실무 경험을 쌓아 온 과정과<br />새로운 기술을 익혀 가는 여정입니다.</>}
     />
   )
 }
